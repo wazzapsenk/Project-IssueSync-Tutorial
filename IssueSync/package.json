@@ -1,0 +1,25 @@
+{
+  "name": "issuesync",
+  "version": "1.0.0",
+  "description": "Sync Google Sheets with GitHub Issues (with Assignee support)",
+  "main": "sync-issues.js",
+  "type": "module",
+  "scripts": {
+    "sync": "node sync-issues.js"
+  },
+  "keywords": [
+    "google-sheets",
+    "github-issues",
+    "sync",
+    "nodejs",
+    "octokit",
+    "assignee"
+  ],
+  "author": "Your Name <you@example.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "googleapis": "^105.0.0",
+    "@octokit/rest": "^19.0.0"
+  }
+}

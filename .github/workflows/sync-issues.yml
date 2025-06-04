@@ -1,0 +1,55 @@
+name: Google Sheets → GitHub Issues Sync (with Assignee)
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  sync-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Set Environment Variables
+        run: |
+          echo "GCP_SHEETS_CREDENTIALS<<EOF" >> $GITHUB_ENV
+          echo "${{ secrets.GCP_SHEETS_CREDENTIALS }}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+          echo "GSHEET_ID=${{ secrets.GSHEET_ID }}" >> $GITHUB_ENV
+
+          echo "SHEET_NAME=Sheet1" >> $GITHUB_ENV
+
+          echo "REPO_OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
+          echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+
+          echo "DEFAULT_ASSIGNEE=${{ secrets.DEFAULT_ASSIGNEE }}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Install Dependencies
+        run: |
+          cd IssueSync
+          npm ci
+        shell: bash
+
+      - name: Run Sync Script
+        working-directory: IssueSync
+        env:
+          GCP_SHEETS_CREDENTIALS: ${{ env.GCP_SHEETS_CREDENTIALS }}
+          GSHEET_ID: ${{ env.GSHEET_ID }}
+          SHEET_NAME: ${{ env.SHEET_NAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ env.REPO_OWNER }}
+          REPO_NAME: ${{ env.REPO_NAME }}
+          DEFAULT_ASSIGNEE: ${{ env.DEFAULT_ASSIGNEE }}
+        run: |
+          node sync-issues.js
+        shell: bash
