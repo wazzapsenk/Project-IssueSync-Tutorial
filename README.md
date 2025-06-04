@@ -36,6 +36,8 @@ With everything in **any** project synced this way, your team can continue using
 ---
 
 ## 2. Repo Layout
+
+<pre><code>
 Project-IssueSync-Tutorial/
 ├── .github/
 │   └── workflows/
@@ -47,6 +49,8 @@ Project-IssueSync-Tutorial/
 │   ├── .env.example
 │   └── sync-issues.js
 └── README.md
+</code></pre>
+
 
 
 1. **`.github/workflows/sync-issues.yml`** - Defines a GitHub Actions workflow.  
